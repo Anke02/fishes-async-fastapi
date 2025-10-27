@@ -1,0 +1,21 @@
+[project]
+name = "fishes-async-fastapi"
+version = "0.1.0"
+description = "FastAPI async application for managing fishes and regions with PostgreSQL"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.16.5",
+    "asyncpg>=0.30.0",
+    "fastapi>=0.118.0",
+    "gunicorn>=23.0.0",
+    "just>=0.8.165",
+    "psycopg2-binary>=2.9.11",
+    "pydantic>=2.11.9",
+    "pydantic-settings>=2.11.0",
+    "sqlalchemy>=2.0.43",
+    "uvicorn>=0.37.0",
+    "python-dateutil>=2.9.0",
+    "sentry-sdk[fastapi]>=2.42.1",
+    "python-json-logger>=4.0.0",
+]
