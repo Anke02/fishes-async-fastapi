@@ -1,4 +1,4 @@
-from src.schemas import CustomModel
+from src.schemas import CustomModel, PaginationResponse
 
 
 class RegionBase(CustomModel):
@@ -17,9 +17,6 @@ class RegionUpdate(RegionBase):
 
 class RegionResponse(RegionBase):
     id: int
-
-
-from src.schemas import PaginationResponse
 
 
 class RegionList(PaginationResponse):

@@ -4,7 +4,6 @@ from sqlalchemy import delete, select, insert, func
 
 from src import database
 from src.fishes.models import fishes, fish_regions
-from src.fishes.schemas import FishCreate, FishUpdate
 
 
 async def get_fish_by_id(
@@ -30,11 +29,11 @@ async def get_fish_by_scientific_name(
 
 
 async def create_fish(
-    fish_data: FishCreate
+    fish_data: dict[str, Any]
 ) -> dict[str, Any]:
     query = (
         insert(fishes)
-        .values(**fish_data.model_dump())
+        .values(**fish_data)
         .returning(fishes)
     )
     return await database.fetch_one(query, commit_after=True)
@@ -67,13 +66,13 @@ async def list_fishes(
 
 async def update_fish(
     fish_id: int, 
-    fish_data: FishUpdate
+    fish_data: dict[str, Any]
 ) -> dict[str, Any]:
     
     query = (
         fishes.update()
         .where(fishes.c.id == fish_id)
-        .values(**fish_data.model_dump(exclude_unset=True))
+        .values(**fish_data)
         .returning(fishes)
     )
     return await database.fetch_one(query, commit_after=True)  

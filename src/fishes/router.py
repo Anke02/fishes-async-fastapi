@@ -4,7 +4,6 @@ from typing import Any
 from src.fishes import services as fish_services
 from src.fishes import dependencies as fish_dependencies
 from src.fishes import schemas as fish_schemas
-from src.regions import dependencies as region_dependencies
 
 
 router = APIRouter(prefix="/fishes", tags=["fishes"])
@@ -35,7 +34,6 @@ async def create_fish(
     return await fish_services.create_fish(fish_data)
 
 
-
 @router.get(
     "/{fish_id}",
     response_model=fish_schemas.FishResponse,
@@ -46,7 +44,6 @@ async def get_fish_by_id(
     fish: dict[str, Any] = Depends(fish_dependencies.valid_fish_id)
 ):
     return fish
-
 
 
 @router.put(
@@ -60,7 +57,6 @@ async def update_fish(
     fish: dict[str, Any] = Depends(fish_dependencies.valid_fish_id)
 ):
     return await fish_services.update_fish(fish['id'], update_data)
-
 
 
 @router.delete(
@@ -84,7 +80,6 @@ async def get_fish_regions(
     fish: dict[str, Any] = Depends(fish_dependencies.valid_fish_id)
 ):
     return await fish_services.get_fish_regions(fish['id'])
-
 
 
 @router.post(

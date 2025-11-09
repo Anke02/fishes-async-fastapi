@@ -45,7 +45,6 @@ async def check_region_name_exists(
     name_en: str | None = None, 
     exclude_id: int | None = None
 ) -> bool:
-    """Check if region with given name already exists."""
     conditions = []
     
     if name_pl:
@@ -56,7 +55,6 @@ async def check_region_name_exists(
     if not conditions:
         return False
     
-    # Use OR logic - region exists if either name matches
     query = select(regions).where(or_(*conditions))
     
     if exclude_id is not None:
@@ -82,7 +80,6 @@ async def update_region(
     region_id: int, 
     region_data
 ) -> dict[str, Any] | None:
-    """Update region with provided data (only updates fields that were explicitly set)."""
     
     query = (
         regions.update()
@@ -95,7 +92,6 @@ async def update_region(
 
 
 async def check_region_in_use(region_id: int) -> bool:
-    """Check if region is used in any fish_regions relationships."""
     query = select(func.count().label('count')).select_from(fish_regions).where(fish_regions.c.region_id == region_id)
     result = await database.fetch_one(query)
     return result['count'] > 0

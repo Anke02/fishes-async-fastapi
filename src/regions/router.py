@@ -3,15 +3,15 @@ from typing import Any
 
 from src.regions import services as region_services
 from src.regions import dependencies as region_dependencies
-from src.regions.schemas import RegionCreate, RegionList, RegionResponse, RegionUpdate
+from src.regions import schemas as region_schemas
 
 
 router = APIRouter(prefix="/regions", tags=["regions"])
 
-# OK
+
 @router.get(
     "", 
-    response_model=RegionList,
+    response_model=region_schemas.RegionList,
     status_code=status.HTTP_200_OK,
     description="Get list of all available regions",
 )
@@ -22,38 +22,37 @@ async def list_regions(
     
     return await region_services.list_regions(limit=limit, page=page)
 
-# W trakcie
+
 @router.post(
     "",
-    response_model=RegionResponse,
+    response_model=region_schemas.RegionResponse,
     status_code=status.HTTP_201_CREATED,
     description="Create a new region"
 )
 async def create_region(
-    region_data: RegionCreate = Depends(region_dependencies.valid_region_create)
+    region_data: region_schemas.RegionCreate = Depends(region_dependencies.valid_region_create)
 ):
     return await region_services.create_region(region_data)
 
-# OK
+
 @router.get(
     "/{region_id}",
-    response_model=RegionResponse,
+    response_model=region_schemas.RegionResponse,
     description="Get detailed information about a specific region"
 )
 async def get_region(
     region: dict[str, Any] = Depends(region_dependencies.valid_region_id)
 ):
     return region
-   
+ 
 
-# OK
 @router.put(
     "/{region_id}",
-    response_model=RegionResponse,
+    response_model=region_schemas.RegionResponse,
     description="Update region details"
 )
 async def update_region(
-    region_data: RegionUpdate = Depends(region_dependencies.valid_region_update),
+    region_data: region_schemas.RegionUpdate = Depends(region_dependencies.valid_region_update),
     region: dict[str, Any] = Depends(region_dependencies.valid_region_id)
 ):
     return await region_services.update_region(
@@ -62,7 +61,6 @@ async def update_region(
     )
 
 
-# OK
 @router.delete(
     "/{region_id}",
     status_code=status.HTTP_204_NO_CONTENT,

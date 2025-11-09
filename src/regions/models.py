@@ -6,6 +6,6 @@ regions = Table(
     "regions",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("name_pl", String(100), unique=True, nullable=False), # np. "Amazonka", "Afryka"
-    Column("name_en", String(100), unique=True, nullable=False), # np. "Amazon", "Africa"
+    Column("name_pl", String(100), unique=True, nullable=False),
+    Column("name_en", String(100), unique=True, nullable=False),
 )

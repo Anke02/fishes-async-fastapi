@@ -2,8 +2,8 @@ from fastapi import Depends, Path
 from typing import Any
 
 from src.fishes import services as fish_service
-from src.fishes.exceptions import FishNotFound, DuplicateScientificName, FishRegionAlreadyExists, FishRegionNotFound
-from src.fishes.schemas import FishCreate, FishUpdate
+from src.fishes import exceptions as fish_exceptions
+from src.fishes import schemas as fish_schemas
 from src.regions import dependencies as region_dependencies
 
 
@@ -13,7 +13,7 @@ async def valid_fish_id(
     
     fish = await fish_service.get_fish_by_id(fish_id)
     if not fish:
-        raise FishNotFound()
+        raise fish_exceptions.FishNotFound()
     return fish
 
 
@@ -27,21 +27,21 @@ async def verify_scientific_name(
         
     existing = await fish_service.get_fish_by_scientific_name(name)
     if existing and (exclude_fish_id is None or existing['id'] != exclude_fish_id):
-        raise DuplicateScientificName()
+        raise fish_exceptions.DuplicateScientificName()
 
 
 async def valid_fish_create(
-    fish_data: FishCreate
-) -> FishCreate:
+    fish_data: fish_schemas.FishCreate
+) -> fish_schemas.FishCreate:
 
     await verify_scientific_name(fish_data.name_scientific)
     return fish_data
 
 
 async def valid_fish_update(
-    fish_data: FishUpdate,
+    fish_data: fish_schemas.FishUpdate,
     existing_fish: dict[str, Any] = Depends(valid_fish_id)
-) -> FishUpdate:
+) -> fish_schemas.FishUpdate:
 
     await verify_scientific_name(fish_data.name_scientific, exclude_fish_id=existing_fish['id'])
     return fish_data
@@ -54,7 +54,7 @@ async def valid_fish_region_create(
 
     existing = await fish_service.get_fish_region(fish['id'], region['id'])
     if existing:
-        raise FishRegionAlreadyExists()
+        raise fish_exceptions.FishRegionAlreadyExists()
     
     return {"fish": fish, "region": region}
 
@@ -66,6 +66,6 @@ async def valid_fish_region_delete(
 
     existing = await fish_service.get_fish_region(fish['id'], region['id'])
     if not existing:
-        raise FishRegionNotFound()
+        raise fish_exceptions.FishRegionNotFound()
     
     return {"fish": fish, "region": region}

@@ -1,4 +1,4 @@
-from src.schemas import CustomModel
+from src.schemas import CustomModel, PaginationResponse
 
 
 class FishBase(CustomModel):
@@ -21,14 +21,8 @@ class FishResponse(FishBase):
     id: int
 
 
-from src.schemas import PaginationResponse
-
-
 class FishList(PaginationResponse):
     items: list[FishResponse]
-
-
-#################################################################################
 
 
 class FishRegionBase(CustomModel):
